@@ -5,6 +5,7 @@ from logic.adapters import domain_to_dto, dto_to_domain
 
 def sim_explorer_ui():
     with st.expander("Simulation Project Explorer", expanded=True):
+        st.subheader("Save simulation setup")
         # --- One-time hydration from ?cfg= param ---
         cfg_id = st.query_params.get("cfg", None)
         if "loaded_cfg_id" not in st.session_state:
@@ -35,36 +36,35 @@ def sim_explorer_ui():
             st.success("Saved. The page URL now restores this setup.")
 
         st.divider()
-
+        st.subheader("Load simulation setup")
         # --- Search + list ---
-        c1, c2 = st.columns([2, 1])
-        with c1:
-            q = st.text_input("Search projects by name", placeholder="Type to filter…")
-        with c2:
-            refresh = st.button("↻ Refresh list", use_container_width=True)
+        #c1, c2 = st.columns([2, 1])
+        #with c1:
+        #    q = st.text_input("Search projects by name", placeholder="Type to filter…")
+        #with c2:
+        #    refresh = st.button("↻ Refresh list", use_container_width=True)
 
-        if refresh:
-            st.rerun()
+        #if refresh:
+        #    st.rerun()
 
-        items = search_configs(q.strip()) if q.strip() else list_configs()
+        items = list_configs()
 
         # Present as a selectable list
         names = [f"{i.name}  —  {i.id}" for i in items]
         selected_idx = st.selectbox(
             "Available projects",
             options=range(len(items)) if items else [],
-            format_func=lambda i: names[i],
+            format_func=lambda i: names[i].split("  —  ")[0],
             index=0 if items else None,
             placeholder="No projects found" if not items else None,
         )
 
-        colA, colB, colC = st.columns([1,1,1])
-        with colA:
-            load_clicked = st.button("📥 Load selected", use_container_width=True, disabled=not items)
-        with colB:
-            del_clicked = st.button("🗑️ Delete selected", use_container_width=True, disabled=not items)
-        with colC:
-            copy_clicked = st.button("📋 Copy link", use_container_width=True, disabled=not items)
+        #colA, colB, colC = st.columns([1,1,1])
+        load_clicked = st.button("📥 Load selected", use_container_width=True, disabled=not items)
+        #with colB:
+        #    del_clicked = st.button("🗑️ Delete selected", use_container_width=True, disabled=not items)
+        #with colC:
+        #    copy_clicked = st.button("📋 Copy link", use_container_width=True, disabled=not items)
 
         if items and selected_idx is not None:
             chosen = items[selected_idx]
@@ -76,13 +76,13 @@ def sim_explorer_ui():
                 st.success(f"Loaded: {chosen.name}")
                 st.rerun()
 
-            if del_clicked:
-                delete_config(chosen.id)
-                st.success(f"Deleted: {chosen.name}")
-                st.rerun()
+            #if del_clicked:
+            #    delete_config(chosen.id)
+            #    st.success(f"Deleted: {chosen.name}")
+            #    st.rerun()
 
-            if copy_clicked:
-                # Streamlit doesn’t copy to clipboard natively here; show the URL for manual copy.
-                base = st.experimental_get_query_params()
-                st.query_params["cfg"] = chosen.id  # ensure URL reflects the chosen id
-                st.info("Copy the current page URL from your browser; it now includes the selected config ID.")
+            #if copy_clicked:
+            #    # Streamlit doesn’t copy to clipboard natively here; show the URL for manual copy.
+            #    base = st.experimental_get_query_params()
+            #    st.query_params["cfg"] = chosen.id  # ensure URL reflects the chosen id
+            #    st.info("Copy the current page URL from your browser; it now includes the selected config ID.")
