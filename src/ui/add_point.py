@@ -73,10 +73,10 @@ def add_measurement_point(session: SessionModel):
                 name=name,
                 frequency_h=horiz_frequency,
                 amplitude_h=horiz_amplitude,    
-                phase_h=np.deg2rad(horiz_phase),
+                phase_h=horiz_phase,
                 frequency_v=vert_frequency,
                 amplitude_v=vert_amplitude,
-                phase_v=np.deg2rad(vert_phase)
+                phase_v=vert_phase
             )
             session.measurement_points.append(new_point)
             st.success(f"Measurement Point {name} added.")
