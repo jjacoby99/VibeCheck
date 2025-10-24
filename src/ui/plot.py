@@ -113,9 +113,9 @@ def run_animation(session: SessionModel, h_axis='y', v_axis='z'):
     # ax.set_box_aspect((L, W, H))  # optional
 
     placeholder = st.empty()
-    start = st.button("▶ Run animation", type="primary")
+    
 
-    if not start:
+    if not session.run_simulation:
         # Draw a static first frame
         placeholder.pyplot(fig, clear_figure=False)
         return
