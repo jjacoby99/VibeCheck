@@ -10,30 +10,29 @@ def blower_dimensions_input(session: SessionModel):
             length = st.number_input(
                 "Length - x (m)", 
                 min_value=0.0, 
-                value=getattr(session.blower, 'length', 1.0),
-                key="blower_length_x"
+                value=session.blower.length if session.blower else 1.0,
+                key=f"blower_length_x_{str(session.blower.length)}"
             )
+            session.blower.length = length
+
         with c2:
             width = st.number_input(
                 "Width - y (m)", 
                 min_value=0.0, 
-                value=getattr(session.blower, 'width', 1.0),
-                key="blower_width_y"
+                value=session.blower.width if session.blower else 1.0,
+                key=f"blower_width_y_{str(session.blower.width)}"
             )
+            session.blower.width = width
+
         with c3:
             height = st.number_input(
                 "Height - z (m)", 
                 min_value=0.0, 
-                value=getattr(session.blower, 'height', 1.0),
-                key="blower_height_z"
+                value=session.blower.height if session.blower else 1.0,
+                key=f"blower_height_z_{str(session.blower.height)}"
             )
+            session.blower.height = height
 
         if not height or not width or not length:
             st.info("Please enter valid blower dimensions.")
             return
-
-        session.blower = Cuboid(
-            length=length, 
-            width=width, 
-            height=height
-        )
