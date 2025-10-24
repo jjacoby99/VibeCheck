@@ -3,7 +3,8 @@ from models.session import SessionModel
 from models.sim import Sim
 
 def sim_parameters(session: SessionModel):
-    
+    if not session.measurement_points:
+        return
     with st.container(border=True):
         if not session.sim_props:
             return
